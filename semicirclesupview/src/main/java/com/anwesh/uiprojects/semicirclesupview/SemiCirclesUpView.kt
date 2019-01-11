@@ -28,3 +28,33 @@ fun Float.divideScale(i : Int, n : Int) : Float = Math.min(n.inverse(), maxScale
 fun Float.scaleFactor() : Float = Math.floor(this / scDiv).toFloat()
 fun Float.mirrorValue(a : Int, b : Int) : Float = (1 - scaleFactor()) * a.inverse() + scaleFactor() * b.inverse()
 fun Float.updateScale(dir : Float, a : Int, b : Int) : Float = mirrorValue(a, b) * scGap * dir
+
+fun Paint.setStrokeStyle(size : Float) {
+    style = Paint.Style.STROKE
+    strokeWidth = size
+    strokeCap = Paint.Cap.ROUND
+    color = foreColor
+}
+
+fun Canvas.drawSCUNode(i : Int, scale : Float, paint : Paint) {
+    val w : Float = width.toFloat()
+    val h : Float = height.toFloat()
+    val gap : Float = w / (nodes + 1)
+    val size : Float = gap / sizeFactor
+    val sc1 : Float = scale.divideScale(0, 2)
+    val sc2 : Float = scale.divideScale(1, 2)
+    val rGap : Float = size / (semiCircles)
+    paint.setStrokeStyle(Math.min(w, h) / strokeFactor)
+    save()
+    translate(gap * (i + 1), h/2)
+    for (j in 0..(semiCircles - 1)) {
+        val scj1 : Float = sc1.divideScale(j, semiCircles)
+        val scj2 : Float = sc2.divideScale(semiCircles - 1 - j, semiCircles)
+        val r : Float = scGap * (j + 1)
+        save()
+        translate(0f, -(h/2 + paint.strokeWidth) * scj2)
+        drawArc(RectF(-r, -r, r, r), 180f, 180f * scj1, false, paint)
+        restore()
+    }
+    restore()
+}
