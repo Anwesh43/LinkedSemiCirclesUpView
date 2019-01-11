@@ -212,4 +212,12 @@ class SemiCirclesUpView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+        fun create(activity: Activity) : SemiCirclesUpView {
+            val view : SemiCirclesUpView = SemiCirclesUpView(activity)
+            activity.setContentView(view)
+            return view
+        }
+    }
 }
