@@ -123,4 +123,48 @@ class SemiCirclesUpView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    data class SCUNode(var i : Int, val state : State = State()) {
+
+        private var next : SCUNode? = null
+        private var prev : SCUNode? = null
+
+        init {
+            addNeighbor()
+        }
+
+        fun addNeighbor() {
+            if (i < nodes - 1) {
+                next = SCUNode(i + 1)
+                next?.prev = this
+            }
+        }
+
+        fun draw(canvas : Canvas, paint : Paint) {
+            canvas.drawSCUNode(i, state.scale, paint)
+            next?.draw(canvas, paint)
+        }
+
+        fun update(cb : (Int, Float) -> Unit) {
+            state.update {
+                cb(i, it)
+            }
+        }
+
+        fun startUpdating(cb : () -> Unit) {
+            state.startUpdating(cb)
+        }
+
+        fun getNext(dir : Int, cb : () -> Unit) : SCUNode {
+            var curr : SCUNode? = prev
+            if (dir == 1) {
+                curr = next
+            }
+            if (curr != null) {
+                return curr
+            }
+            cb()
+            return this
+        }
+    }
 }
