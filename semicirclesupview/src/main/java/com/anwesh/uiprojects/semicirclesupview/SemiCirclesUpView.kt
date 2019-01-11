@@ -190,4 +190,26 @@ class SemiCirclesUpView(ctx : Context) : View(ctx) {
             curr.startUpdating(cb)
         }
     }
+
+    data class Renderer(var view : SemiCirclesUpView) {
+
+        private val animator : Animator = Animator(view)
+        private val scu : SemiCirclesUpStep = SemiCirclesUpStep(0)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(Color.parseColor("#BDBDBD"))
+            scu.draw(canvas, paint)
+            animator.animate {
+                scu.update {i, scl ->
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            scu.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
