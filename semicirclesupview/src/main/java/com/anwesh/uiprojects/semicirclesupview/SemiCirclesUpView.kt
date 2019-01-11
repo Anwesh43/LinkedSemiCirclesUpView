@@ -50,7 +50,7 @@ fun Canvas.drawSCUNode(i : Int, scale : Float, paint : Paint) {
     for (j in 0..(semiCircles - 1)) {
         val scj1 : Float = sc1.divideScale(j, semiCircles)
         val scj2 : Float = sc2.divideScale(semiCircles - 1 - j, semiCircles)
-        val r : Float = scGap * (j + 1)
+        val r : Float = rGap * (j + 1)
         save()
         translate(0f, -(h/2 + paint.strokeWidth) * scj2)
         drawArc(RectF(-r, -r, r, r), 180f, 180f * scj1, false, paint)
